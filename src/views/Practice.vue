@@ -31,7 +31,13 @@
             </v-form>
           </v-card-text>
           <v-card-actions>
-            <v-btn block large color="primary" @click="submit" :disabled="this.filtered.slice(0, this.form.question_amount).length == 0">Start</v-btn>
+            <v-btn
+              block
+              large
+              color="primary"
+              @click="submit"
+              :disabled="this.filtered.slice(0, this.form.question_amount).length == 0"
+            >Start</v-btn>
           </v-card-actions>
         </v-card>
       </v-col>
@@ -40,8 +46,8 @@
 </template>
 
 <script>
-import Category from "../apis/Category"
-import Question from "../apis/Question"
+import Category from "../apis/Category";
+import Question from "../apis/Question";
 
 export default {
   name: "Practice",
@@ -57,43 +63,50 @@ export default {
         questions: []
       },
       filtered: []
-    }
+    };
   },
   computed: {},
   methods: {
     submit() {
-      var router = this.$router
-      this.$store.dispatch("setQuestions", this.filtered.slice(0, this.form.question_amount))
+      var router = this.$router;
+      this.$store.dispatch(
+        "setQuestions",
+        this.filtered.slice(0, this.form.question_amount)
+      );
       router.push({
         name: "Quiz"
-      })
+      });
     }
   },
   watch: {
     form: {
       handler() {
         this.filtered = this.data.questions
-          .filter((el) => {
-            return this.form.categories.length ? this.form.categories.includes(el.category_id) : true
+          .filter(el => {
+            return this.form.categories.length
+              ? this.form.categories.includes(el.category.id)
+              : true;
           })
-          .filter((el) => {
-            return this.form.is_checked ? el.is_checked == this.form.is_checked : true
-          })
+          .filter(el => {
+            return this.form.is_checked
+              ? el.is_checked == this.form.is_checked
+              : true;
+          });
       },
       deep: true
     }
   },
   mounted() {
-    Category.all().then((response) => {
-      this.data.categories = response.data.data
-    })
-    Question.all().then((response) => {
-      this.data.questions = response.data.data
-    })
+    Category.all().then(response => {
+      this.data.categories = response.data.data;
+    });
+    Question.all().then(response => {
+      this.data.questions = response.data.data;
+    });
   },
   beforeCreate() {
-    this.$store.dispatch("removeQuestions")
-    this.$store.dispatch("removeResponses")
+    this.$store.dispatch("removeQuestions");
+    this.$store.dispatch("removeResponses");
   }
-}
+};
 </script>

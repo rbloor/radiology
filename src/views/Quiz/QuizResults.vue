@@ -24,7 +24,10 @@
                   <v-list-item-title class="green--text" v-text="category"></v-list-item-title>
                 </v-list-item-content>
                 <v-list-item-content>
-                  <v-list-item-title class="green--text" v-text="filterCorrect(group) + '/' + group.length"></v-list-item-title>
+                  <v-list-item-title
+                    class="green--text"
+                    v-text="filterCorrect(group) + '/' + group.length"
+                  ></v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
             </v-list-item-group>
@@ -39,10 +42,13 @@
                   <v-icon color="red">mdi-cancel</v-icon>
                 </v-list-item-icon>
                 <v-list-item-content>
-                  <v-list-item-title class="red--text" v-text="category"></v-list-item-title>
+                  <v-list-item-title class="red--text" v-text="group.category.name"></v-list-item-title>
                 </v-list-item-content>
                 <v-list-item-content>
-                  <v-list-item-title class="red--text" v-text="filterCorrect(group) + '/' + group.length"></v-list-item-title>
+                  <v-list-item-title
+                    class="red--text"
+                    v-text="filterCorrect(group) + '/' + group.length"
+                  ></v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
             </v-list-item-group>
@@ -57,8 +63,8 @@
 </template>
 
 <script>
-import { mapState } from "vuex"
-import DoughnutChart from "@/components/DoughnutChart"
+import { mapState } from "vuex";
+import DoughnutChart from "@/components/DoughnutChart";
 export default {
   name: "QuizResults",
   components: {
@@ -70,46 +76,49 @@ export default {
 
       goodGroups: [],
       badGroups: []
-    }
+    };
   },
   computed: {
     ...mapState(["questions", "responses"]),
     correct() {
-      return this.filterCorrect(this.responses)
+      return this.filterCorrect(this.responses);
     },
     wrong() {
-      return this.filterWrong(this.responses)
+      return this.filterWrong(this.responses);
     },
     total() {
-      return this.responses.length
+      return this.responses.length;
     },
     percentage() {
-      return Math.round((this.correct / this.total) * 100)
+      return Math.round((this.correct / this.total) * 100);
     },
     groups() {
       return this.responses.reduce((result, currentValue) => {
-        result[currentValue.question.category_id] = [...(result[currentValue.question.category_id] || []), currentValue]
-        return result
-      }, {})
+        result[currentValue.question.category.id] = [
+          ...(result[currentValue.question.category.id] || []),
+          currentValue
+        ];
+        return result;
+      }, {});
     }
   },
   methods: {
     filterCorrect(array) {
-      return array.filter((elem) => {
-        return elem.outcome
-      }).length
+      return array.filter(elem => {
+        return elem.outcome;
+      }).length;
     },
     filterWrong(array) {
-      return array.filter((elem) => {
-        return !elem.outcome
-      }).length
+      return array.filter(elem => {
+        return !elem.outcome;
+      }).length;
     },
     finish() {
-      this.$router.push({ name: "Dashboard" })
+      this.$router.push({ name: "Dashboard" });
     }
   },
   watch: {},
   mounted() {},
   beforeCreate() {}
-}
+};
 </script>
