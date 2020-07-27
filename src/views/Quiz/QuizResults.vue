@@ -21,7 +21,7 @@
                   <v-icon color="green">mdi-check</v-icon>
                 </v-list-item-icon>
                 <v-list-item-content>
-                  <v-list-item-title class="green--text" v-text="group.category.name"></v-list-item-title>
+                  <v-list-item-title class="green--text" v-text="group.question.category.name"></v-list-item-title>
                 </v-list-item-content>
                 <v-list-item-content>
                   <v-list-item-title
@@ -42,7 +42,7 @@
                   <v-icon color="red">mdi-cancel</v-icon>
                 </v-list-item-icon>
                 <v-list-item-content>
-                  <v-list-item-title class="red--text" v-text="group.category.name"></v-list-item-title>
+                  <v-list-item-title class="red--text" v-text="group.question.category.name"></v-list-item-title>
                 </v-list-item-content>
                 <v-list-item-content>
                   <v-list-item-title
