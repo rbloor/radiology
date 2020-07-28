@@ -1,5 +1,5 @@
 <template>
-  <v-card class="elevation-12">
+  <v-card max-width="600" class="mx-auto elevation-12">
     <v-toolbar color="primary" dark flat dense>
       <v-toolbar-title>Take Quiz</v-toolbar-title>
       <v-spacer></v-spacer>
@@ -48,13 +48,19 @@
     <v-card-actions>
       <v-btn class="ma-2" color="primary" @click="prev()" v-if="index > 0">Prev</v-btn>
       <v-btn class="ma-2 ml-auto" color="primary" @click="next()" v-if="is_answered">Next</v-btn>
-      <v-btn class="ma-2 ml-auto" color="primary" @click="mark()" v-if="!is_answered" :disabled="selected.length == 0">Mark</v-btn>
+      <v-btn
+        class="ma-2 ml-auto"
+        color="primary"
+        @click="mark()"
+        v-if="!is_answered"
+        :disabled="selected.length == 0"
+      >Mark</v-btn>
     </v-card-actions>
   </v-card>
 </template>
 
 <script>
-import { mapState } from "vuex"
+import { mapState } from "vuex";
 export default {
   name: "QuizStart",
   data() {
@@ -62,74 +68,83 @@ export default {
       index: 0,
       selected: [],
       is_answered: false
-    }
+    };
   },
   computed: {
     ...mapState(["questions", "responses"]),
     question() {
-      return this.questions[this.index]
+      return this.questions[this.index];
     },
     progress() {
-      return Math.ceil((this.index / this.questions.length) * 100)
+      return Math.ceil((this.index / this.questions.length) * 100);
     }
   },
   methods: {
     load() {
-      let response = this.responses[this.index]
+      let response = this.responses[this.index];
       if (response) {
-        this.selected = response.answers
-        this.is_answered = true
+        this.selected = response.answers;
+        this.is_answered = true;
       } else {
-        this.selected = []
-        this.is_answered = false
+        this.selected = [];
+        this.is_answered = false;
       }
     },
     prev() {
-      this.index--
+      this.index--;
     },
     next() {
       if (this.questions.length == this.index + 1) {
-        this.$router.push({ name: "QuizResults" })
+        this.$router.push({ name: "QuizResults" });
       }
-      this.index++
+      this.index++;
     },
     mark() {
-      this.is_answered = true
+      this.is_answered = true;
 
       let outcome = this.question.answers
-        .filter((el) => {
-          return el.is_correct
+        .filter(el => {
+          return el.is_correct;
         })
-        .every((el) => {
+        .every(el => {
           return (
-            (this.question.type == "single" && el.id === this.selected && el.is_correct) ||
-            (this.question.type == "multiple" && this.selected.some((a) => a === el.id) && el.is_correct)
-          )
-        })
+            (this.question.type == "single" &&
+              el.id === this.selected &&
+              el.is_correct) ||
+            (this.question.type == "multiple" &&
+              this.selected.some(a => a === el.id) &&
+              el.is_correct)
+          );
+        });
 
-      this.responses[this.index] = { question: this.question, answers: this.selected, outcome: outcome }
-      this.$store.dispatch("setResponses", this.responses)
+      this.responses[this.index] = {
+        question: this.question,
+        answers: this.selected,
+        outcome: outcome
+      };
+      this.$store.dispatch("setResponses", this.responses);
     },
     isCorrectAnswer(answer) {
-      return this.is_answered && answer.is_correct
+      return this.is_answered && answer.is_correct;
     },
     isWrongAnswer(answer) {
       return (
         this.is_answered &&
-        ((this.question.type == "multiple" && this.selected.some((el) => el === answer.id)) ||
+        ((this.question.type == "multiple" &&
+          this.selected.some(el => el === answer.id)) ||
           (this.question.type == "single" && this.selected === answer.id)) &&
         !answer.is_correct
-      )
+      );
     }
   },
   watch: {
     index() {
-      this.load()
+      this.load();
     }
   },
   mounted() {
-    this.load()
+    this.load();
   },
   beforeCreate() {}
-}
+};
 </script>

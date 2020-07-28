@@ -1,5 +1,5 @@
 <template>
-  <v-card class="elevation-12">
+  <v-card max-width="600" class="mx-auto elevation-12">
     <v-toolbar color="primary light" dark dense>
       <v-toolbar-title>Quiz Introduction</v-toolbar-title>
     </v-toolbar>

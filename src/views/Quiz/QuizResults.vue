@@ -1,58 +1,31 @@
 <template>
-  <v-card class="elevation-12">
+  <v-card max-width="600" class="mx-auto elevation-12">
     <v-toolbar color="primary" dark flat dense>
       <v-toolbar-title>Quiz Results</v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-toolbar-title class="ml-auto">End</v-toolbar-title>
     </v-toolbar>
     <v-card-text>
       <v-row>
-        <v-col cols="4">
-          <DoughnutChart :data="[wrong, correct]"></DoughnutChart>
-          <h2 class="display-1 text-center">{{ percentage }}%</h2>
-          <h3 class="text-center">You got {{ correct }} out of {{ total }}</h3>
+        <v-col cols="12" sm="6">
+          <DoughnutChart :data="[correct, wrong]"></DoughnutChart>
         </v-col>
-        <v-col class>
-          <h2 class="h2">Areas you know well</h2>
-          <v-list :flat="true" :disabled="true">
-            <v-list-item-group v-for="(group, category) in groups" :key="category">
-              <v-list-item v-if="filterCorrect(group) == group.length">
-                <v-list-item-icon>
-                  <v-icon color="green">mdi-check</v-icon>
-                </v-list-item-icon>
-                <v-list-item-content>
-                  <v-list-item-title class="green--text" v-text="group[0].question.category.name"></v-list-item-title>
-                </v-list-item-content>
-                <v-list-item-content>
-                  <v-list-item-title
-                    class="green--text"
-                    v-text="filterCorrect(group) + '/' + group.length"
-                  ></v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-            </v-list-item-group>
-          </v-list>
-          <h2 class="h2">Room for improvement</h2>
-          <v-list :flat="true" :disabled="true">
-            <v-list-item-group v-for="(group, category) in groups" :key="category">
-              <v-list-item selected="true" v-if="filterCorrect(group) != group.length">
-                <v-list-item-icon>
-                  <v-icon color="red">mdi-cancel</v-icon>
-                </v-list-item-icon>
-                <v-list-item-content>
-                  <v-list-item-title class="red--text" v-text="group[0].question.category.name"></v-list-item-title>
-                </v-list-item-content>
-                <v-list-item-content>
-                  <v-list-item-title
-                    class="red--text"
-                    v-text="filterCorrect(group) + '/' + group.length"
-                  ></v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-            </v-list-item-group>
-          </v-list>
+        <v-col cols="12" sm="6">
+          <h2 class="mt-4 mb-4 text-center text-sm-left">You got {{ correct }} out of {{ total }}</h2>
+          <h2 class="display-1 mb-4 text-center text-sm-left">{{ percentage }}%</h2>
         </v-col>
       </v-row>
+      <h2 class="h2">Overview</h2>
+      <v-simple-table class="mt-4" :light="true">
+        <tbody>
+          <tr v-for="(group, category) in groups" :key="category">
+            <td>
+              <v-icon v-if="filterCorrect(group) == group.length" color="green">mdi-check</v-icon>
+              <v-icon v-if="filterCorrect(group) != group.length" color="red">mdi-cancel</v-icon>
+            </td>
+            <td :class="getColorClass(group)">{{ group[0].question.category.name }}</td>
+            <td :class="getColorClass(group)">{{ filterCorrect(group) + '/' + group.length }}</td>
+          </tr>
+        </tbody>
+      </v-simple-table>
     </v-card-text>
     <v-card-actions>
       <v-btn class="ma-2 ml-auto" color="primary" @click="finish()">Finish</v-btn>
@@ -69,9 +42,7 @@ export default {
     DoughnutChart
   },
   data() {
-    return {
-      progress: 100
-    };
+    return {};
   },
   computed: {
     ...mapState(["questions", "responses"]),
@@ -108,12 +79,14 @@ export default {
         return !elem.outcome;
       }).length;
     },
+    getColorClass(array) {
+      return this.filterCorrect(array) == array.length
+        ? "green--text"
+        : "red--text";
+    },
     finish() {
       this.$router.push({ name: "Dashboard" });
     }
-  },
-  watch: {},
-  mounted() {},
-  beforeCreate() {}
+  }
 };
 </script>
