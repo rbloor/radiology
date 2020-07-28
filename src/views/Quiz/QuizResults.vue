@@ -21,7 +21,7 @@
                   <v-icon color="green">mdi-check</v-icon>
                 </v-list-item-icon>
                 <v-list-item-content>
-                  <v-list-item-title class="green--text" v-text="group.question.category.name"></v-list-item-title>
+                  <v-list-item-title class="green--text" v-text="group[0].question.category.name"></v-list-item-title>
                 </v-list-item-content>
                 <v-list-item-content>
                   <v-list-item-title
@@ -32,8 +32,6 @@
               </v-list-item>
             </v-list-item-group>
           </v-list>
-        </v-col>
-        <v-col class>
           <h2 class="h2">Room for improvement</h2>
           <v-list :flat="true" :disabled="true">
             <v-list-item-group v-for="(group, category) in groups" :key="category">
@@ -42,7 +40,7 @@
                   <v-icon color="red">mdi-cancel</v-icon>
                 </v-list-item-icon>
                 <v-list-item-content>
-                  <v-list-item-title class="red--text" v-text="group.question.category.name"></v-list-item-title>
+                  <v-list-item-title class="red--text" v-text="group[0].question.category.name"></v-list-item-title>
                 </v-list-item-content>
                 <v-list-item-content>
                   <v-list-item-title
@@ -72,10 +70,7 @@ export default {
   },
   data() {
     return {
-      progress: 100,
-
-      goodGroups: [],
-      badGroups: []
+      progress: 100
     };
   },
   computed: {

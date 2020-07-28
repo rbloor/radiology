@@ -14,6 +14,12 @@
         <v-list-item to="/quiz" v-if="isLoggedIn">
           <v-list-item-content>Take Quiz</v-list-item-content>
         </v-list-item>
+        <v-list-item :to="{ name: 'QuestionList' }" v-if="isLoggedIn">
+          <v-list-item-content>Questions</v-list-item-content>
+        </v-list-item>
+        <v-list-item :to="{ name: 'CategoryList' }" v-if="isLoggedIn">
+          <v-list-item-content>Categories</v-list-item-content>
+        </v-list-item>
         <v-list-item @click="logout" v-if="isLoggedIn">
           <v-list-item-content>Logout</v-list-item-content>
         </v-list-item>
@@ -28,40 +34,50 @@
       <v-btn :to="{ name: 'Login' }" v-if="!isLoggedIn" text class="hidden-sm-and-down">Login</v-btn>
       <v-btn :to="{ name: 'Register' }" v-if="!isLoggedIn" text class="hidden-sm-and-down">Register</v-btn>
       <v-btn to="/quiz" v-if="isLoggedIn" text class="hidden-sm-and-down">Take Quiz</v-btn>
-      <v-btn :to="{ name: 'QuestionList' }" v-if="isLoggedIn" text class="hidden-sm-and-down">Questions</v-btn>
-      <v-btn :to="{ name: 'CategoryList' }" v-if="isLoggedIn" text class="hidden-sm-and-down">Categories</v-btn>
+      <v-btn
+        :to="{ name: 'QuestionList' }"
+        v-if="isLoggedIn"
+        text
+        class="hidden-sm-and-down"
+      >Questions</v-btn>
+      <v-btn
+        :to="{ name: 'CategoryList' }"
+        v-if="isLoggedIn"
+        text
+        class="hidden-sm-and-down"
+      >Categories</v-btn>
       <v-btn @click="logout" v-if="isLoggedIn" text class="hidden-sm-and-down">Logout</v-btn>
     </v-app-bar>
   </span>
 </template>
 
 <script>
-import User from "../apis/User"
+import User from "../apis/User";
 
 export default {
   name: "AppNavigation",
   data() {
     return {
       drawer: false,
-      isLoggedIn: false
-    }
+      isLoggedIn: true
+    };
   },
   mounted() {
     this.$root.$on("login", () => {
-      this.isLoggedIn = true
-    })
-    this.isLoggedIn = !!localStorage.getItem("user")
+      this.isLoggedIn = true;
+    });
+    this.isLoggedIn = !!localStorage.getItem("user");
   },
   methods: {
     logout() {
       User.logout().then(() => {
-        this.isLoggedIn = false
-        this.$store.dispatch("logout")
-        this.$router.push({ name: "Login" })
-      })
+        this.isLoggedIn = false;
+        this.$store.dispatch("logout");
+        this.$router.push({ name: "Login" });
+      });
     }
   }
-}
+};
 </script>
 
 <style scoped></style>
