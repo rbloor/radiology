@@ -33,7 +33,7 @@
               <v-text-field
                 :error-messages="errors.password_confirmation"
                 label="Password Confirmation"
-                v-model="form.password_confirm"
+                v-model="form.password_confirmation"
                 prepend-icon="mdi-lock"
                 type="password"
               ></v-text-field>
