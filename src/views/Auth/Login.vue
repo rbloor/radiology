@@ -53,7 +53,7 @@ export default {
         .then(response => {
           this.$root.$emit("login", true);
           this.$store.dispatch("login", response.data);
-          this.$router.push({ name: "Home" });
+          this.$router.push({ name: "Dashboard" });
         })
         .catch(error => {
           if (error.response.status === 422) {
