@@ -81,7 +81,7 @@ export default {
         name: "",
         source: "",
         type: "",
-        is_checked: "",
+        is_checked: false,
         category_id: "",
         user_id: "",
         answers: []
