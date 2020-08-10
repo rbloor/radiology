@@ -35,6 +35,14 @@
             ></v-checkbox>
           </td>
           <td>
+            <v-tooltip top v-if="is_answered && answer.notes">
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn inline small color="secondary" dark v-bind="attrs" v-on="on">notes</v-btn>
+              </template>
+              <span>{{ answer.notes }}</span>
+            </v-tooltip>
+          </td>
+          <td>
             <span class="pa-2 green" v-if="!!isCorrectAnswer(answer)">
               <v-icon dark>mdi-check</v-icon>
             </span>
