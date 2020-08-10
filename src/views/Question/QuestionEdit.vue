@@ -101,6 +101,7 @@ export default {
     });
     Category.all().then(response => {
       this.categories = response.data.data;
+      console.log(this.categories);
     });
   },
   methods: {
