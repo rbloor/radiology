@@ -27,6 +27,6 @@ export default {
   async profile(id) {
     await Csrf.getCookie()
 
-    return Api.get(`/user/` + id)
+    return Api.get(`/user/${id}`)
   }
 }

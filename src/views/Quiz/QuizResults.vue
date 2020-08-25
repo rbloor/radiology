@@ -36,13 +36,16 @@
 <script>
 import { mapState } from "vuex";
 import DoughnutChart from "@/components/DoughnutChart";
+import Submission from "@/apis/Submission";
 export default {
   name: "QuizResults",
   components: {
     DoughnutChart
   },
   data() {
-    return {};
+    return {
+      errors: null
+    };
   },
   computed: {
     ...mapState(["questions", "responses"]),
@@ -85,7 +88,22 @@ export default {
         : "red--text";
     },
     finish() {
-      this.$router.push({ name: "Dashboard" });
+      let data = this.responses.map(function(a) {
+        return {
+          user_id: 1,
+          question_id: a.question.id,
+          is_correct: a.outcome
+        };
+      });
+      Submission.createOrUpdate(data)
+        .then(() => {
+          this.$router.push({ name: "Dashboard" });
+        })
+        .catch(error => {
+          if (error.response.status === 422) {
+            this.errors = error.response.data.errors;
+          }
+        });
     }
   }
 };
