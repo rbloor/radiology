@@ -22,5 +22,11 @@ export default {
 
   auth() {
     return Api.get("/user")
+  },
+
+  async profile(id) {
+    await Csrf.getCookie()
+
+    return Api.get(`/user/` + id)
   }
 }

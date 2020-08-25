@@ -91,7 +91,7 @@ function isLoggedIn() {
 }
 
 router.beforeEach((to, from, next) => {
-  if (to.matched.some((record) => record.meta.authOnly)) {
+  if (to.matched.some(record => record.meta.authOnly)) {
     // this route requires auth, check if logged in
     // if not, redirect to login page.
     if (!isLoggedIn()) {
@@ -102,12 +102,12 @@ router.beforeEach((to, from, next) => {
     } else {
       next()
     }
-  } else if (to.matched.some((record) => record.meta.guestOnly)) {
+  } else if (to.matched.some(record => record.meta.guestOnly)) {
     // this route requires auth, check if logged in
     // if not, redirect to login page.
     if (isLoggedIn()) {
       next({
-        path: "/home",
+        path: "/dashboard",
         query: { redirect: to.fullPath }
       })
     } else {
