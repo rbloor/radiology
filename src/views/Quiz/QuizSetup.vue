@@ -19,10 +19,10 @@
             <v-switch v-model="form.is_checked" class="ma-2" label="Checked by a Consultant"></v-switch>
           </v-col>
           <v-col cols="auto">
-            <v-switch v-model="form.is_answered" class="ma-2" label="Answered I have previously"></v-switch>
+            <v-switch v-model="form.is_answered_wrong" class="ma-2" label="Answered incorrectly"></v-switch>
           </v-col>
           <v-col cols="auto">
-            <v-switch v-model="form.is_author" class="ma-2" label="Questions created by me"></v-switch>
+            <v-switch v-model="form.is_author" class="ma-2" label="Created by me"></v-switch>
           </v-col>
         </v-row>
         <v-slider
@@ -53,6 +53,8 @@
 <script>
 import Category from "@/apis/Category";
 import Question from "@/apis/Question";
+import User from "@/apis/User";
+import { mapState } from "vuex";
 export default {
   name: "QuizSetup",
   data() {
@@ -60,6 +62,7 @@ export default {
       categories: [],
       questions: [],
       filtered_questions: [],
+      questions_answered_wrong: [],
       form: {
         categories: [],
         is_checked: 0,
@@ -68,6 +71,9 @@ export default {
         question_limit: 0
       }
     };
+  },
+  computed: {
+    ...mapState(["user"])
   },
   methods: {
     submit() {
@@ -91,8 +97,15 @@ export default {
             return this.form.is_checked
               ? el.is_checked == this.form.is_checked
               : true;
+          })
+          .filter(el => {
+            return this.form.is_author ? el.user_id == this.user.id : true;
+          })
+          .filter(el => {
+            return this.form.is_answered_wrong
+              ? this.questions_answered_wrong.includes(el.id)
+              : true;
           });
-        // filter is_author and is_answered
       },
       deep: true
     }
@@ -104,6 +117,10 @@ export default {
     Question.all().then(response => {
       this.filtered_questions = response.data.data;
       this.questions = response.data.data;
+    });
+    User.profile(this.user.id).then(response => {
+      this.questions_answered_wrong =
+        response.data.data.questions_answered_wrong;
     });
   },
   beforeCreate() {
