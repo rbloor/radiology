@@ -48,7 +48,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["questions", "responses"]),
+    ...mapState(["questions", "responses", "user"]),
     correct() {
       return this.filterCorrect(this.responses);
     },
@@ -88,9 +88,9 @@ export default {
         : "red--text";
     },
     finish() {
-      let data = this.responses.map(function(a) {
+      let data = this.responses.map(a => {
         return {
-          user_id: 1,
+          user_id: this.user.id,
           question_id: a.question.id,
           is_correct: a.outcome
         };
