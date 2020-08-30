@@ -55,11 +55,12 @@
           fab
           x-small
           dark
-          :to="{ name: 'QuestionEdit', params: { id: item.id }}"
+          :to="{ name: 'QuestionEdit', params: { id: item.id, allowed: canEdit(item) }}"
+          v-if="canEdit(item)"
         >
           <v-icon>mdi-pencil-outline</v-icon>
         </v-btn>
-        <v-btn class="ml-2 red" fab x-small dark @click="deleteItem(item)">
+        <v-btn class="ml-2 red" fab x-small dark @click="deleteItem(item)" v-if="canDelete(item)">
           <v-icon>mdi-trash-can-outline</v-icon>
         </v-btn>
       </template>
@@ -68,6 +69,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 import Question from "@/apis/Question";
 export default {
   data() {
@@ -83,6 +85,9 @@ export default {
       search: "",
       expanded: []
     };
+  },
+  computed: {
+    ...mapState(["user"])
   },
   methods: {
     getQuestions() {
@@ -102,6 +107,12 @@ export default {
         Question.delete(item.id).then(() => {
           this.items.splice(index, 1);
         });
+    },
+    canDelete(item) {
+      return item.user_id == this.user.id;
+    },
+    canEdit(item) {
+      return item.user_id == this.user.id;
     }
   },
   mounted() {

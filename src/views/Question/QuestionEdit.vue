@@ -71,6 +71,10 @@ export default {
     id: {
       type: [Number, String],
       required: true
+    },
+    allowed: {
+      type: Boolean,
+      required: true
     }
   },
   data() {
@@ -96,6 +100,9 @@ export default {
     };
   },
   created() {
+    if (!this.allowed) {
+      this.$router.push({ name: "QuestionList" });
+    }
     Question.find(this.id).then(response => {
       this.form = response.data.data;
     });

@@ -19,9 +19,11 @@
       </template>
       <template v-slot:item.actions="{ item }">
         <edit-category-modal :item="item" v-on:edit:item="editItem(items.indexOf(item), $event)"></edit-category-modal>
+        <!--
         <v-btn class="ml-2 red" fab x-small dark @click="deleteItem(item)">
           <v-icon>mdi-trash-can-outline</v-icon>
         </v-btn>
+        -->
       </template>
     </v-data-table>
   </div>
