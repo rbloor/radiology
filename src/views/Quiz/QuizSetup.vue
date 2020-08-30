@@ -14,15 +14,19 @@
           multiple
           outlined
         ></v-select>
+        <h2>Filter questions by:</h2>
         <v-row>
           <v-col cols="auto">
-            <v-switch v-model="form.is_checked" class="ma-2" label="Checked by a Consultant"></v-switch>
+            <v-switch v-model="form.is_checked" class="ma-2" label="Consultant checked"></v-switch>
+          </v-col>
+          <v-col cols="auto">
+            <v-switch v-model="form.is_author" class="ma-2" label="Created by me"></v-switch>
           </v-col>
           <v-col cols="auto">
             <v-switch v-model="form.is_answered_wrong" class="ma-2" label="Answered incorrectly"></v-switch>
           </v-col>
           <v-col cols="auto">
-            <v-switch v-model="form.is_author" class="ma-2" label="Created by me"></v-switch>
+            <v-switch v-model="form.is_not_answered" class="ma-2" label="Not answered yet"></v-switch>
           </v-col>
         </v-row>
         <v-slider
@@ -63,11 +67,13 @@ export default {
       questions: [],
       filtered_questions: [],
       questions_answered_wrong: [],
+      unanswered_questions: [],
       form: {
         categories: [],
         is_checked: 0,
         is_answered: 0,
         is_author: 0,
+        is_not_answered: 0,
         question_limit: 0
       }
     };
@@ -105,6 +111,11 @@ export default {
             return this.form.is_answered_wrong
               ? this.questions_answered_wrong.includes(el.id)
               : true;
+          })
+          .filter(el => {
+            return this.form.is_not_answered
+              ? this.unanswered_questions.includes(el.id)
+              : true;
           });
       },
       deep: true
@@ -121,6 +132,7 @@ export default {
     User.profile(this.user.id).then(response => {
       this.questions_answered_wrong =
         response.data.data.questions_answered_wrong;
+      this.unanswered_questions = response.data.data.unanswered_questions;
     });
   },
   beforeCreate() {
