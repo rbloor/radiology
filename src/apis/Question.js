@@ -6,6 +6,10 @@ export default {
     return Api.get("/question")
   },
 
+  shuffled() {
+    return Api.get("/question/shuffled")
+  },
+
   find(id) {
     return Api.get(`/question/${id}`)
   },

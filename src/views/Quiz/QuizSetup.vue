@@ -125,7 +125,7 @@ export default {
     Category.all().then(response => {
       this.categories = response.data.data;
     });
-    Question.all().then(response => {
+    Question.shuffled().then(response => {
       this.filtered_questions = response.data.data;
       this.questions = response.data.data;
     });
